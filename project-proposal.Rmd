@@ -1,0 +1,48 @@
+---
+title: "Project Proposal for CMP595"
+author: "Camil Samer Zahlan Redwan"
+date: "November 8, 2018"
+output: html_document
+---
+
+# Brazilian Stock Analysis
+
+*BM&FBovespa* (Bovespa) is the only stock exchange authorized to operate in Brazil.
+The average volume of negotiations accounts for approximately 10 billion reais
+and the total market value of Bovespa has already surpassed 800 billion dollars.
+
+# The databases
+
+The volume of trades generate a large amount of data that can be analysed by
+financial analysts and investors. Those data are publicly available at Bovespa
+website: 
+[Bovespa Historical data](http://www.bmfbovespa.com.br/en_us/services/market-data/historical-data/equities/historical-data/)
+
+# Structure of the data
+
+Financial data is traditionaly regarded as *time series data*. The interaction
+of the investors in the (virtual) marketplace of Bovespa
+creates a dynamic fluctuation (over) of the stocks's quotations and volume of trade.
+
+Each database that can be find in the above link
+consists of many lines of fixed 245 characters length whose
+semantics is specifed in the following document.
+[Bovespa Layout](http://www.bmfbovespa.com.br/lumis/portal/file/fileDownload.jsp?fileId=8A828D294E9C618F014EB79B6BB3435C)
+
+For example, the first line **COTAHIST_A2017.txt** (exchanges made in 2017, summarized by date) is
+
+012017010202AALR3       010ALLIAR      ON      NM   R$  000000000146200000000014880000000001440000000000145800000000014600000000001460000000000147300087000000000000035900000000000052350500000000000000009999123100000010000000000000BRAALRACNOR6100
+
+being the
+  * 2 first characters (01) the type of register;
+  * 8 following characters (20170102) the date of exchange. Note that the market doesn't open in holydays;
+  * 2 following characters (02) describes the CBI code of the stock;
+  * 12 following characters (AALR3        ) the paper negotiation code;
+  * and so on
+
+# Questions
+
+  * Which paper stock had the highest value increase?
+  * Which paper stock had the worse depreciation?
+  * Which paper would return the best profit for capital investment?
+
