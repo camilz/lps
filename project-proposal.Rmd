@@ -2,47 +2,89 @@
 title: "Project Proposal for CMP595"
 author: "Camil Samer Zahlan Redwan"
 date: "November 8, 2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
-# Brazilian Stock Analysis
+# Porto Alegre Meteorological Data
 
-*BM&FBovespa* (Bovespa) is the only stock exchange authorized to operate in Brazil.
-The average volume of negotiations accounts for approximately 10 billion reais
-and the total market value of Bovespa has already surpassed 800 billion dollars.
+The *Instituto Nacional de Meteorologia*, the brazilian national meteorological institute,
+subordinate to the Ministério da Agricultura, Pecuária e Abastecimento, provides extensive
+meteorological data in a municipal bases. The dataset used in this project consists of
+the Porto Alegre meteorological data gathered by a conventional meteorological station.
+The meteorological data of Porto Alegre and many more brazilian cities can be downloaded in [**BDMEP**](http://www.inmet.gov.br/portal/index.php?r=bdmep/bdmep) (http://www.inmet.gov.br/portal/index.php?r=bdmep/bdmep). It only requires a free account subscription.
 
-# The databases
+This database shows information from 01/01/1961 to 31/07/2018 in a daily bases and consists
+of 38629 rows and 11 columns. Each row consists of the observations of the 11 variables described in what follows:
 
-The volume of trades generate a large amount of data that can be analysed by
-financial analysts and investors. Those data are publicly available at Bovespa
-website: 
-[Bovespa Historical data](http://www.bmfbovespa.com.br/en_us/services/market-data/historical-data/equities/historical-data/)
+  * Code of the meteorological station (always constant, since the data is regarded to Porto Alegre city);
+  
+  * Date of observation;
+  
+  * Maximum daily temperature;
+  
+  * Minimum daily temperature;
+  
+  * Preciptation level;
+  
+  * Insolation; (that is, the solar irradiance received in Porto Alegre)
+  
+  * Evaporation; (measured by the variable Evaporacao_Piche. The name of this variable is a reference to the apparatus used for estimating the evaporation called *Evaporímetro de Piche*)
+  
+  * Average relative umidity;
+  
+  * Average wind velocity;
 
-# Structure of the data
+I made the dataset available in a branch from [lps](https://github.com/schnorr/lps) in my
+github [camilz/lps](https://github.com/camilz/lps/tree/camilz-patch-1) that is named
+*porto-alegre-metereological-data.csv*.
 
-Financial data is traditionaly regarded as *time series data*. The interaction
-of the investors in the (virtual) marketplace of Bovespa
-creates a dynamic fluctuation (over) of the stocks's quotations and volume of trade.
+To get the data from my local repository and take a look at it, we could use the following chunk of code
 
-Each database that can be find in the above link
-consists of many lines of fixed 245 characters length whose
-semantics is specifed in the following document.
-[Bovespa Layout](http://www.bmfbovespa.com.br/lumis/portal/file/fileDownload.jsp?fileId=8A828D294E9C618F014EB79B6BB3435C)
+```{r}
+file = "porto-alegre-metereological-data.csv"
+if(!file.exists(file)){
+  download.file("https://github.com/camilz/lps/tree/camilz-patch-1/porto-alegre-metereological-data.csv",
+	destfile=file)
+}
 
-For example, the first line **COTAHIST_A2017.txt** (exchanges made in 2017, summarized by date) is
+all_content <- readLines(file);
 
-012017010202AALR3       010ALLIAR      ON      NM   R$  000000000146200000000014880000000001440000000000145800000000014600000000001460000000000147300087000000000000035900000000000052350500000000000000009999123100000010000000000000BRAALRACNOR6100
+# All fine to this point
+head(all_content, n=10)
 
-being the
-  * 2 first characters (01) the type of register;
-  * 8 following characters (20170102) the date of exchange. Note that the market doesn't open in holydays;
-  * 2 following characters (02) describes the CBI code of the stock;
-  * 12 following characters (AALR3        ) the paper negotiation code;
-  * and so on
+# But can't import with the next line
+#df <- read.csv(skip_preamble, header=T, sep=",")
 
-# Questions
+library(readr);
+df <- read_csv(file, locale = locale(encoding = "UTF-8"), col_types=cols(
+  Estacao = col_integer(),
+  Data = col_character(),
+  Hora = col_factor(levels = c("00:00", "12:00")), # The observations are made at 00:00 and 12:00.
+  Precipitacao = col_double(),
+  TempMaxima = col_double(),
+  TempMinima = col_double(),
+  Insolacao = col_double(),
+  Evaporacao_Piche = col_double(),
+  Temp_Comp_Media = col_double(),
+  Umidade_Relativa_Media = col_double(),
+  Velocidade_do_Vento_Media = col_double()
+));
 
-  * Which paper stock had the highest value increase?
-  * Which paper stock had the worse depreciation?
-  * Which paper would return the best profit for capital investment?
+df;
+```
+
+
+# Questions to be answered
+
+  * There are more than 50 years of daily observations on the dataset. We ask:
+      - What are the average temperature;
+      - The avarage precipitation;
+      - Average insolation;
+  * When extreme weather contitions occurred? Do the extreme weather contidions occurs in a regular frequency or are they completely unpredictible?
+  * Is there a global trend in Porto Alegre's weather reagarding each of the variables ?
+  * How the does the weather changes regarding the seasons? Specificaly:
+      - Does the average winter's temperature is getting lower ?
+      - Does the average summer's temperature is getting higher ?
 
