@@ -1,4 +1,4 @@
-Estacao,Data,Hora,Precipitacao,TempMaxima,TempMinima,Insolacao,Evaporacao Piche,Temp_Comp_Media,Umidade_Relativa_Media,Velocidade_do_Vento_Media
+Estacao,Data,Hora,Precipitacao,TempMaxima,TempMinima,Insolacao,Evaporacao_Piche,Temp_Comp_Media,Umidade_Relativa_Media,Velocidade_do_Vento_Media
 83967,01/01/1961,00:00,,33.8,,11.7,2.4,27.08,67,2.333333
 83967,01/01/1961,12:00,,,22.2,,,,,
 83967,02/01/1961,00:00,,34.7,,9.5,4,28.06,62.5,1.333333
